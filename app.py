@@ -13,14 +13,29 @@ DROPBOX_ACCESS_TOKEN = os.getenv("DROPBOX_ACCESS_TOKEN")
 
 app = Flask(__name__)
 
-# Global variables
+
 camera = None
 streaming = False
 recording_thread = None
 
 
-# Duration (in seconds) for each video segment
+
 SEGMENT_DURATION = 10
+
+
+
+index = 0
+while True:
+    cap = cv2.VideoCapture(index)
+    if not cap.read()[0]:
+        break
+    else:
+        print(f"Camera found at index {index}")
+    cap.release()
+    index += 1
+
+print("No more cameras detected.")
+
 
 def open_camera():
     global camera
@@ -40,7 +55,7 @@ def record_and_upload():
     """
     global streaming, camera
     while streaming:
-        # Create a unique filename using the current timestamp
+
         segment_filename = f"recorded_{int(time.time())}.avi"
         fourcc = cv2.VideoWriter_fourcc(*'XVID')
         out = cv2.VideoWriter(segment_filename, fourcc, 20.0, (640, 480))
@@ -53,14 +68,14 @@ def record_and_upload():
             out.write(frame)
         out.release()
         
-        # Upload the recorded segment to Dropbox
+
         upload_to_dropbox(segment_filename)
         
-        # Remove the local file after upload
+
         if os.path.exists(segment_filename):
             os.remove(segment_filename)
         
-        # Small pause before starting next segment
+
         time.sleep(0.5)
 
 def upload_to_dropbox(file_path):
@@ -88,7 +103,6 @@ def toggle_stream():
         recording_thread = threading.Thread(target=record_and_upload)
         recording_thread.start()
     else:
-        # Stop streaming and wait for the recording thread to finish
         streaming = False
         if recording_thread is not None:
             recording_thread.join()
