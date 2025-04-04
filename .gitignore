@@ -61,3 +61,21 @@ migrations/
 
 client_secret_*.json
 client_secrets.json
+
+# Ignore recorded media files
+*.wav
+*.mp3
+*.mp4
+*.mkv
+*.webm
+*.ogg
+*.flac
+*.avi
+*.mov
+
+# Ignore any recordings folder
+recordings/
+recorded/
+media/
+uploads/
+
