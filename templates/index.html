@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Real-time Video to Dropbox</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <script>
+    async function toggleStream() {
+      let response = await fetch('/toggle_stream', { method: 'POST' });
+      let data = await response.json();
+      let btn = document.getElementById('toggle-stream-btn');
+      btn.innerText = data.state ? "Stop Streaming" : "Start Streaming";
+      // Update the video feed display only if streaming is active.
+      if(data.state) {
+          document.getElementById('video-container').innerHTML = '<img src="/video_feed" id="video-feed">';
+      } else {
+          document.getElementById('video-container').innerHTML = '';
+      }
+    }
+  </script>
+</head>
+<body>
+  <h1>Real-time Video Recording to Dropbox</h1>
+  <button id="toggle-stream-btn" onclick="toggleStream()">Start Streaming</button>
+  <div id="video-container"></div>
+</body>
+</html>
