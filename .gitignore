@@ -57,3 +57,7 @@ yarn-error.log*
 
 # Migrations (optional, if you regenerate them)
 migrations/
+
+
+client_secret_*.json
+client_secrets.json
